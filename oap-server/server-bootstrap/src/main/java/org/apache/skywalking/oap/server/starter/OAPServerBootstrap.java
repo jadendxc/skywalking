@@ -35,8 +35,10 @@ public class OAPServerBootstrap {
     public static void start() {
         String mode = System.getProperty("mode");
         RunningMode.setMode(mode);
-
+        /*加载service目录下的类文件*/
         ApplicationConfigLoader configLoader = new ApplicationConfigLoader();
+
+
         ModuleManager manager = new ModuleManager();
         try {
             ApplicationConfiguration applicationConfiguration = configLoader.load();

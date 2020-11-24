@@ -1,0 +1,22 @@
+1. oap-server 服务端代码
+2. server-library 服务端库代码
+	a. client 服务端作为client进行连接的库，如连接es jdbc grpc等
+	b. moudle 服务端模块库，各个模块
+
+ModuleDefine实现了ModuleProviderHolder 管理相应的ModuleProvider,提供了通过prepare方法对ModuleProvider的初始化，初始化涉及了配置项的拷贝，就是将配置导入到ModuleProvider里自定义的ModuleConfig配置
+
+ModuleManager实现了ModuleDefineHolder 管理所有的ModuleDefine 并通过init方法提供了ModuleDefine的初始化，init先通过spi机制加载了所有的ModuleDefine和ModuleProvider类，然后调用ModuleDefine的prepare方法来初始化对应的ModuleProvider
+
+ModuleProvider实现了 ModuleServiceHolder 管理着模块所有的service， 
+
+上面三个类主要是用于服务的管理与初始化，其中ModuleManager的init方法会执行BootstrapFlow对应的流程方法，这里会涉及到server的启动
+
+SourceDispatcher //用于将handle处理过后的源数据进行格式转换
+
+DispatcherDetectorListener SourceDispatcher监听
+
+SourceReceiver(接收数据)->Service 该service属于core的service
+
+
+
+StreamProcessor

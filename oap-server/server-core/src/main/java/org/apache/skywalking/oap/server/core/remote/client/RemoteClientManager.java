@@ -91,6 +91,9 @@ public class RemoteClientManager implements Service {
 
     public void start() {
         Optional.ofNullable(sslContext).ifPresent(DynamicSslContext::start);
+        /**
+        * 刷新正在运行的节点列表
+        * */
         Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(this::refresh, 1, 5, TimeUnit.SECONDS);
     }
 
@@ -130,7 +133,7 @@ public class RemoteClientManager implements Service {
                 instanceList.forEach(instance -> LOGGER.debug("Cluster instance: {}", instance.toString()));
             }
 
-            if (!compare(instanceList)) {
+            if (!compare(instanceList)) { //如果正在运行的节点列表与当前获取到的节点列表不一致，则重新构建节点列表
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("ReBuilding remote clients.");
                 }
@@ -198,13 +201,13 @@ public class RemoteClientManager implements Service {
         unChangeAddresses.stream()
                          .filter(remoteClientCollection::containsKey)
                          .forEach(unChangeAddress -> remoteClientCollection.get(unChangeAddress)
-                                                                           .setAction(Action.Unchanged));
+                                                                           .setAction(Action.Unchanged));//未改变节点增加标识
 
         // make the latestRemoteClients including the new clients only
-        unChangeAddresses.forEach(latestRemoteClients::remove);
-        remoteClientCollection.putAll(latestRemoteClients);
+        unChangeAddresses.forEach(latestRemoteClients::remove);//删除掉latestRemoteClients中的未改变的节点
+        remoteClientCollection.putAll(latestRemoteClients);//将新增的节点添加到节点集合
 
-        final List<RemoteClient> newRemoteClients = new LinkedList<>();
+        final List<RemoteClient> newRemoteClients = new LinkedList<>();//将更新后的节点列表转储到该列表中
         remoteClientCollection.forEach((address, clientAction) -> {
             switch (clientAction.getAction()) {
                 case Unchanged:
@@ -227,7 +230,7 @@ public class RemoteClientManager implements Service {
         //for stable ordering for rolling selector
         Collections.sort(newRemoteClients);
         this.usingClients = ImmutableList.copyOf(newRemoteClients);
-
+        //最后将剩余close节点关闭
         remoteClientCollection.values()
                               .stream()
                               .filter(remoteClientAction -> remoteClientAction.getAction().equals(Action.Close))

@@ -142,7 +142,7 @@ public class AnalyzerModuleProvider extends ModuleProvider {
             listenerManager.add(new MultiScopesAnalysisListener.Factory(getManager()));
             listenerManager.add(new NetworkAddressAliasMappingListener.Factory(getManager()));
         }
-        listenerManager.add(new SegmentAnalysisListener.Factory(getManager(), moduleConfig));
+        listenerManager.add(new SegmentAnalysisListener.Factory(getManager(), moduleConfig));//添加链路信息监听器工厂
 
         return listenerManager;
     }

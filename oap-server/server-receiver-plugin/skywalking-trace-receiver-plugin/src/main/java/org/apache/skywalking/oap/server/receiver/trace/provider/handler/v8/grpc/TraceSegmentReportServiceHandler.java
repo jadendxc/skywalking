@@ -71,7 +71,7 @@ public class TraceSegmentReportServiceHandler extends TraceSegmentReportServiceG
 
                 HistogramMetrics.Timer timer = histogram.createTimer();
                 try {
-                    segmentParserService.send(segment);
+                    segmentParserService.send(segment);//接收到最总数据报告后 跨段数据解析service
                 } catch (Exception e) {
                     errorCounter.inc();
                 } finally {

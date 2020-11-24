@@ -78,7 +78,7 @@ public class DispatcherManager implements DispatcherDetectorListener {
             addIfAsSourceDispatcher(aClass);
         }
     }
-
+    //将扫描到的SourceDispatcher放在dispatcherMap中
     @Override
     public void addIfAsSourceDispatcher(Class aClass) throws IllegalAccessException, InstantiationException {
         if (!aClass.isInterface() && !Modifier.isAbstract(

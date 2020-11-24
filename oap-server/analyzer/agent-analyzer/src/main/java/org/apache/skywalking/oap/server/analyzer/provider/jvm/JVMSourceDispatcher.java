@@ -41,7 +41,7 @@ import org.apache.skywalking.oap.server.core.source.SourceReceiver;
 import org.apache.skywalking.oap.server.library.module.ModuleManager;
 
 @Slf4j
-public class JVMSourceDispatcher {
+public class JVMSourceDispatcher {//jvmhandle处理后把数据通过该对象的sourceReceiver属性进行接收处理
     private final SourceReceiver sourceReceiver;
 
     public JVMSourceDispatcher(ModuleManager moduleManager) {

@@ -32,7 +32,7 @@ import org.apache.skywalking.oap.server.library.module.ModuleDefineHolder;
 /**
  * Stream annotation listener, process the class with {@link Stream} annotation.
  */
-public class StreamAnnotationListener implements AnnotationListener {
+public class StreamAnnotationListener implements AnnotationListener {//监听器用于对扫描到的带Stream注解的类进行流程器构造
 
     private final ModuleDefineHolder moduleDefineHolder;
 

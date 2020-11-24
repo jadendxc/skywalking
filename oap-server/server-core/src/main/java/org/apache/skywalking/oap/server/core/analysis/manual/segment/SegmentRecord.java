@@ -127,7 +127,7 @@ public class SegmentRecord extends Record {
 
     public static class Builder implements StorageBuilder<SegmentRecord> {
 
-        @Override
+        @Override//入库的时候会将对象转为map
         public Map<String, Object> data2Map(SegmentRecord storageData) {
             storageData.statement = Strings.join(new String[] {
                 storageData.endpointName,
@@ -149,7 +149,7 @@ public class SegmentRecord extends Record {
             if (CollectionUtils.isEmpty(storageData.getDataBinary())) {
                 map.put(DATA_BINARY, Const.EMPTY_STRING);
             } else {
-                map.put(DATA_BINARY, new String(Base64.getEncoder().encode(storageData.getDataBinary())));
+                map.put(DATA_BINARY, new String(Base64.getEncoder().encode(storageData.getDataBinary())));//base64加密的二进制
             }
             map.put(VERSION, storageData.getVersion());
             map.put(TAGS, storageData.getTags());

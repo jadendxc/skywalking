@@ -111,7 +111,7 @@ public class CoreModuleProvider extends ModuleProvider {
     private RemoteClientManager remoteClientManager;
     private final AnnotationScan annotationScan;
     private final StorageModels storageModels;
-    private final SourceReceiverImpl receiver;
+    private final SourceReceiverImpl receiver;//handle处理过的源数据进行分发处理
     private ApdexThresholdConfig apdexThresholdConfig;
     private EndpointNameGroupingRuleWatcher endpointNameGroupingRuleWatcher;
 
@@ -169,11 +169,11 @@ public class CoreModuleProvider extends ModuleProvider {
 
         this.registerServiceImplementation(MeterSystem.class, new MeterSystem(getManager()));
 
-        AnnotationScan oalDisable = new AnnotationScan();
-        oalDisable.registerListener(DisableRegister.INSTANCE);
-        oalDisable.registerListener(new DisableRegister.SingleDisableScanListener());
+        AnnotationScan oalDisable = new AnnotationScan();//oaldisable注解扫描器
+        oalDisable.registerListener(DisableRegister.INSTANCE);//注册注解对应的监听器
+        oalDisable.registerListener(new DisableRegister.SingleDisableScanListener());//注册注解对应的监听器
         try {
-            oalDisable.scan();
+            oalDisable.scan();//扫描后执行监听器的notify方法
         } catch (IOException | StorageException e) {
             throw new ModuleStartException(e.getMessage(), e);
         }
@@ -284,11 +284,11 @@ public class CoreModuleProvider extends ModuleProvider {
     public void start() throws ModuleStartException {
         grpcServer.addHandler(new RemoteServiceHandler(getManager()));
         grpcServer.addHandler(new HealthCheckServiceHandler());
-        remoteClientManager.start();
+        remoteClientManager.start();//集群节点更新
 
         try {
-            receiver.scan();
-            annotationScan.scan();
+            receiver.scan();//这个接收器应该用于扫描源分发器
+            annotationScan.scan();//扫描流式数据注解并执行相应的监听器create方法来构造work
         } catch (IOException | IllegalAccessException | InstantiationException | StorageException e) {
             throw new ModuleStartException(e.getMessage(), e);
         }

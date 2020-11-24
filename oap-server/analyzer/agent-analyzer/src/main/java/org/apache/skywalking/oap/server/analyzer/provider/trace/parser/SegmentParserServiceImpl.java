@@ -32,7 +32,7 @@ public class SegmentParserServiceImpl implements ISegmentParserService {
     private final ModuleManager moduleManager;
     private final AnalyzerModuleConfig config;
     @Setter
-    private SegmentParserListenerManager listenerManager;
+    private SegmentParserListenerManager listenerManager;//段解析监听器管理 管理了段的各个分析监听器
 
     @Override
     public void send(SegmentObject segment) {
