@@ -61,7 +61,12 @@ public class JVMModuleProvider extends ModuleProvider {
         GRPCHandlerRegister grpcHandlerRegister = getManager().find(SharingServerModule.NAME)
                                                               .provider()
                                                               .getService(GRPCHandlerRegister.class);
-        grpcHandlerRegister.addHandler(new JVMMetricReportServiceHandler(getManager()));//jvm handler处理
+        /**
+        * @Author duanxuechao
+        * @Description add jvm handler
+        * @Date 11:53 2020/11/30
+        **/
+        grpcHandlerRegister.addHandler(new JVMMetricReportServiceHandler(getManager()));
     }
 
     @Override

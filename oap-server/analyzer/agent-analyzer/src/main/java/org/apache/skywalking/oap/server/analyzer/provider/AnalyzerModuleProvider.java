@@ -117,6 +117,11 @@ public class AnalyzerModuleProvider extends ModuleProvider {
         dynamicConfigurationService.registerConfigChangeWatcher(uninstrumentedGatewaysConfig);
         dynamicConfigurationService.registerConfigChangeWatcher(traceSampleRateWatcher);
 
+        /**
+        * @Author duanxuechao
+        * @Description segment parser service analyzer segment’s source by listener
+        * @Date 15:01 2020/11/26
+        **/
         segmentParserService.setListenerManager(listenerManager());
 
         processService.start(meterConfigs);
@@ -142,8 +147,12 @@ public class AnalyzerModuleProvider extends ModuleProvider {
             listenerManager.add(new MultiScopesAnalysisListener.Factory(getManager()));
             listenerManager.add(new NetworkAddressAliasMappingListener.Factory(getManager()));
         }
-        listenerManager.add(new SegmentAnalysisListener.Factory(getManager(), moduleConfig));//添加链路信息监听器工厂
-
+        /**
+        * @Author duanxuechao
+        * @Description add segment source listener factory
+        * @Date 14:51 2020/11/26
+        **/
+        listenerManager.add(new SegmentAnalysisListener.Factory(getManager(), moduleConfig));
         return listenerManager;
     }
 }

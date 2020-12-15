@@ -20,3 +20,12 @@ SourceReceiver(接收数据)->Service 该service属于core的service
 
 
 StreamProcessor
+
+ModuleDefine 定义了模块提供了哪些service
+ModuleProvider 持有模块定义的所有services prepare方法会实例化所有ModuleDefine中的service，放到services属性中
+
+SegmentObject是采集端发送的原始数据
+每次请求oap都会new一个listener进行原始数据解析，listenner会持有一个Segment实体对象，listenner的
+
+
+TraceSegmentServiceClient consume方法进行数据传输

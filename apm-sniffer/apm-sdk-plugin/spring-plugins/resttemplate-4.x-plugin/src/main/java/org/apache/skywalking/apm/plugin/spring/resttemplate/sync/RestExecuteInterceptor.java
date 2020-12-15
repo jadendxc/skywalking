@@ -42,6 +42,12 @@ public class RestExecuteInterceptor implements InstanceMethodsAroundInterceptor 
         String remotePeer = requestURL.getHost() + ":" + (requestURL.getPort() > 0 ? requestURL.getPort() : "https".equalsIgnoreCase(requestURL
             .getScheme()) ? 443 : 80);
         String formatURIPath = requestURL.getPath();
+        /**
+        * @Author duanxuechao
+        * @Description create Context TracingContext, 2. org.apache.skywalking.apm.agent.core.context.TracingContext
+         *  format url path, context carrier, remote peer
+        * @Date 10:42 2020/12/2
+        **/
         AbstractSpan span = ContextManager.createExitSpan(formatURIPath, contextCarrier, remotePeer);
 
         span.setComponent(ComponentsDefine.SPRING_REST_TEMPLATE);

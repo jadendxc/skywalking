@@ -30,9 +30,14 @@ import org.apache.skywalking.oap.server.core.storage.StorageException;
 import org.apache.skywalking.oap.server.library.module.ModuleDefineHolder;
 
 /**
+* @Author duanxuechao
+* @Description listener handle scan stream class and create Processor‘s work
+* @Date 11:05 2020/11/30
+**/
+/**
  * Stream annotation listener, process the class with {@link Stream} annotation.
  */
-public class StreamAnnotationListener implements AnnotationListener {//监听器用于对扫描到的带Stream注解的类进行流程器构造
+public class StreamAnnotationListener implements AnnotationListener {
 
     private final ModuleDefineHolder moduleDefineHolder;
 

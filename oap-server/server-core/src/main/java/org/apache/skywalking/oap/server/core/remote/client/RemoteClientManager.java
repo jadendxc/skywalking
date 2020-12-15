@@ -92,8 +92,10 @@ public class RemoteClientManager implements Service {
     public void start() {
         Optional.ofNullable(sslContext).ifPresent(DynamicSslContext::start);
         /**
-        * 刷新正在运行的节点列表
-        * */
+        * @Author duanxuechao
+        * @Description flush running node list
+        * @Date 11:47 2020/11/30
+        **/
         Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(this::refresh, 1, 5, TimeUnit.SECONDS);
     }
 
@@ -132,8 +134,12 @@ public class RemoteClientManager implements Service {
             if (LOGGER.isDebugEnabled()) {
                 instanceList.forEach(instance -> LOGGER.debug("Cluster instance: {}", instance.toString()));
             }
-
-            if (!compare(instanceList)) { //如果正在运行的节点列表与当前获取到的节点列表不一致，则重新构建节点列表
+            /**
+            * @Author duanxuechao
+            * @Description if running node list is difference of getting list, rebuild node list
+            * @Date 11:49 2020/11/30
+            **/
+            if (!compare(instanceList)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("ReBuilding remote clients.");
                 }
@@ -198,16 +204,30 @@ public class RemoteClientManager implements Service {
 
         final Set<Address> unChangeAddresses = Sets.intersection(remoteClientCollection.keySet(), latestRemoteClients.keySet());
 
+        /**
+        * @Author duanxuechao
+        * @Description  unchange node identification
+        * @Date 11:48 2020/11/30
+        **/
         unChangeAddresses.stream()
                          .filter(remoteClientCollection::containsKey)
                          .forEach(unChangeAddress -> remoteClientCollection.get(unChangeAddress)
-                                                                           .setAction(Action.Unchanged));//未改变节点增加标识
+                                                                           .setAction(Action.Unchanged));
 
+        /**
+        * @Author duanxuechao
+        * @Description 1. delete latestRemoteClients’s unchange node 2. add new node to node list
+        * @Date 11:49 2020/11/30
+        **/
         // make the latestRemoteClients including the new clients only
-        unChangeAddresses.forEach(latestRemoteClients::remove);//删除掉latestRemoteClients中的未改变的节点
-        remoteClientCollection.putAll(latestRemoteClients);//将新增的节点添加到节点集合
-
-        final List<RemoteClient> newRemoteClients = new LinkedList<>();//将更新后的节点列表转储到该列表中
+        unChangeAddresses.forEach(latestRemoteClients::remove);
+        remoteClientCollection.putAll(latestRemoteClients);
+        /**
+        * @Author duanxuechao
+        * @Description put updated node list to newRemoteClients
+        * @Date 11:52 2020/11/30
+        **/
+        final List<RemoteClient> newRemoteClients = new LinkedList<>();
         remoteClientCollection.forEach((address, clientAction) -> {
             switch (clientAction.getAction()) {
                 case Unchanged:
@@ -230,7 +250,11 @@ public class RemoteClientManager implements Service {
         //for stable ordering for rolling selector
         Collections.sort(newRemoteClients);
         this.usingClients = ImmutableList.copyOf(newRemoteClients);
-        //最后将剩余close节点关闭
+        /**
+        * @Author duanxuechao
+        * @Description close node
+        * @Date 17:42 2020/12/1
+        **/
         remoteClientCollection.values()
                               .stream()
                               .filter(remoteClientAction -> remoteClientAction.getAction().equals(Action.Close))

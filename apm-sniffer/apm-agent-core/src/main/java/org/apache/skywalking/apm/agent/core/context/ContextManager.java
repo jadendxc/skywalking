@@ -53,6 +53,11 @@ public class ContextManager implements BootService {
                 context = new IgnoredTracerContext();
             } else {
                 if (EXTEND_SERVICE == null) {
+                    /**
+                    * @Author duanxuechao
+                    * @Description apm-agent-core SPI ContextManagerExtendService
+                    * @Date 10:44 2020/12/2
+                    **/
                     EXTEND_SERVICE = ServiceManager.INSTANCE.findService(ContextManagerExtendService.class);
                 }
                 context = EXTEND_SERVICE.createTraceContext(operationName, forceSampling);
@@ -106,6 +111,11 @@ public class ContextManager implements BootService {
         if (carrier == null) {
             throw new IllegalArgumentException("ContextCarrier can't be null.");
         }
+        /**
+        * @Author duanxuechao
+        * @Description if operationName is null will create ignore
+        * @Date 10:43 2020/12/2
+        **/
         operationName = StringUtil.cut(operationName, OPERATION_NAME_THRESHOLD);
         AbstractTracerContext context = getOrCreate(operationName, false);
         AbstractSpan span = context.createExitSpan(operationName, remotePeer);

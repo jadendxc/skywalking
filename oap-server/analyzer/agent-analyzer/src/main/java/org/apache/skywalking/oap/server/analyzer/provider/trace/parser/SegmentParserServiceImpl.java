@@ -31,8 +31,13 @@ import org.apache.skywalking.oap.server.analyzer.provider.AnalyzerModuleConfig;
 public class SegmentParserServiceImpl implements ISegmentParserService {
     private final ModuleManager moduleManager;
     private final AnalyzerModuleConfig config;
+    /**
+    * @Author duanxuechao
+    * @Description manager AnalysisListenerFactory
+    * @Date 16:28 2020/11/26
+    **/
     @Setter
-    private SegmentParserListenerManager listenerManager;//段解析监听器管理 管理了段的各个分析监听器
+    private SegmentParserListenerManager listenerManager;
 
     @Override
     public void send(SegmentObject segment) {

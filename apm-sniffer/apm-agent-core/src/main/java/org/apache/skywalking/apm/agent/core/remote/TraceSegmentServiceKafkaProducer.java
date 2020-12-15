@@ -18,10 +18,7 @@
 
 package org.apache.skywalking.apm.agent.core.remote;
 
-import io.grpc.Channel;
 import io.grpc.stub.StreamObserver;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.apache.skywalking.apm.agent.core.boot.BootService;
 import org.apache.skywalking.apm.agent.core.boot.DefaultImplementor;
 import org.apache.skywalking.apm.agent.core.boot.ServiceManager;
@@ -39,13 +36,16 @@ import org.apache.skywalking.apm.network.common.v3.Commands;
 import org.apache.skywalking.apm.network.language.agent.v3.SegmentObject;
 import org.apache.skywalking.apm.network.language.agent.v3.TraceSegmentReportServiceGrpc;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import static org.apache.skywalking.apm.agent.core.conf.Config.Buffer.BUFFER_SIZE;
 import static org.apache.skywalking.apm.agent.core.conf.Config.Buffer.CHANNEL_SIZE;
 import static org.apache.skywalking.apm.agent.core.remote.GRPCChannelStatus.CONNECTED;
 
 @DefaultImplementor
-public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSegment>, TracingContextListener, GRPCChannelListener {
-    private static final ILog LOGGER = LogManager.getLogger(TraceSegmentServiceClient.class);
+public class TraceSegmentServiceKafkaProducer implements BootService, IConsumer<TraceSegment>, TracingContextListener {
+    private static final ILog LOGGER = LogManager.getLogger(TraceSegmentServiceKafkaProducer.class);
 
     private long lastLogTime;
     private long segmentUplinkedCounter;
@@ -57,7 +57,7 @@ public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSe
 
     @Override
     public void prepare() {
-        ServiceManager.INSTANCE.findService(GRPCChannelManager.class).addChannelListener(this);
+        //ServiceManager.INSTANCE.findService(GRPCChannelManager.class).addChannelListener(this);
     }
 
     @Override
@@ -181,12 +181,4 @@ public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSe
         }
     }
 
-    @Override
-    public void statusChanged(GRPCChannelStatus status) {
-        if (CONNECTED.equals(status)) {
-            Channel channel = ServiceManager.INSTANCE.findService(GRPCChannelManager.class).getChannel();
-            serviceStub = TraceSegmentReportServiceGrpc.newStub(channel);
-        }
-        this.status = status;
-    }
 }

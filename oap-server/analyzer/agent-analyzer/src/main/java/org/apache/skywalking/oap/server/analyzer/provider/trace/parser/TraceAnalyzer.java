@@ -38,16 +38,25 @@ import org.apache.skywalking.oap.server.analyzer.provider.trace.parser.listener.
 @RequiredArgsConstructor
 public class TraceAnalyzer {
     private final ModuleManager moduleManager;
-    private final SegmentParserListenerManager listenerManager;//监听器管理
+    private final SegmentParserListenerManager listenerManager;
     private final AnalyzerModuleConfig config;
     private List<AnalysisListener> analysisListeners = new ArrayList<>();
 
-    public void doAnalysis(SegmentObject segmentObject) {//分析链路对象
+    /**
+    * @Author duanxuechao
+    * @Description analysis segment
+    * @Date 16:30 2020/11/26
+    **/
+    public void doAnalysis(SegmentObject segmentObject) {
         if (segmentObject.getSpansList().size() == 0) {
             return;
         }
-
-        createSpanListeners();//工厂类创建监听器
+        /**
+        * @Author duanxuechao
+        * @Description create listener by factory
+        * @Date 16:31 2020/11/26
+        **/
+        createSpanListeners();
 
         try {
             notifySegmentListener(segmentObject);
@@ -75,11 +84,15 @@ public class TraceAnalyzer {
     }
 
     private void notifyListenerToBuild() {
-        analysisListeners.forEach(AnalysisListener::build);//lambda表达式
-        //analysisListeners.forEach(this::testT); lambda表达式 testT作为函数型接口Consumer的匿名内部类实现
+        /**
+        * @Author duanxuechao
+        * @Description lambda expression
+        * @Date 16:31 2020/11/26
+        **/
+        analysisListeners.forEach(AnalysisListener::build);
+        //analysisListeners.forEach(this::testT); lambda expression testT as function interface-> Consumer anonymous-inner-class implement
     }
     /*public  void  testT(AnalysisListener t){
-        System.out.println(t);
     }*/
 
     private void notifyExitListener(SpanObject span, SegmentObject segmentObject) {

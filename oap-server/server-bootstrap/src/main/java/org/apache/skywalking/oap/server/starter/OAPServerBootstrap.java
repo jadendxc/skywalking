@@ -35,7 +35,11 @@ public class OAPServerBootstrap {
     public static void start() {
         String mode = System.getProperty("mode");
         RunningMode.setMode(mode);
-        /*加载service目录下的类文件*/
+        /**
+        * @Author duanxuechao
+        * @Description load SPI file in service dir
+        * @Date 16:34 2020/11/26
+        **/
         ApplicationConfigLoader configLoader = new ApplicationConfigLoader();
 
 

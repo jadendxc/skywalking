@@ -39,9 +39,14 @@ import org.apache.skywalking.oap.server.core.source.ServiceInstanceJVMMemoryPool
 import org.apache.skywalking.oap.server.core.source.ServiceInstanceJVMThread;
 import org.apache.skywalking.oap.server.core.source.SourceReceiver;
 import org.apache.skywalking.oap.server.library.module.ModuleManager;
+/**
+* @Author duanxuechao
+* @Description jvm-receiver handle call sourceReceiver filed‘s receiver to dispatcher source
+* @Date 16:22 2020/11/26
+**/
 
 @Slf4j
-public class JVMSourceDispatcher {//jvmhandle处理后把数据通过该对象的sourceReceiver属性进行接收处理
+public class JVMSourceDispatcher {
     private final SourceReceiver sourceReceiver;
 
     public JVMSourceDispatcher(ModuleManager moduleManager) {

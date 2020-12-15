@@ -32,7 +32,6 @@ import org.apache.skywalking.apm.agent.core.profile.ProfileTaskChannelService;
 import org.apache.skywalking.apm.agent.core.profile.ProfileTaskExecutionService;
 import org.apache.skywalking.apm.agent.core.remote.GRPCChannelListener;
 import org.apache.skywalking.apm.agent.core.remote.GRPCChannelManager;
-import org.apache.skywalking.apm.agent.core.remote.TraceSegmentServiceClient;
 import org.apache.skywalking.apm.agent.core.sampling.SamplingService;
 import org.apache.skywalking.apm.agent.core.test.tools.AgentServiceRule;
 import org.junit.AfterClass;

@@ -53,6 +53,10 @@ import org.apache.skywalking.apm.util.StringUtil;
  * happen, we used {@link TraceSegmentRef} for these scenarios. Check {@link TraceSegmentRef} which is from {@link
  * ContextCarrier} or {@link ContextSnapshot}.
  */
+
+/**
+ * 每个线程一个TracingContext
+ */
 public class TracingContext implements AbstractTracerContext {
     private static final ILog LOGGER = LogManager.getLogger(TracingContext.class);
     private long lastWarningTimestamp = 0;
@@ -349,6 +353,7 @@ public class TracingContext implements AbstractTracerContext {
         if (lastSpan == span) {
             if (lastSpan instanceof AbstractTracingSpan) {
                 AbstractTracingSpan toFinishSpan = (AbstractTracingSpan) lastSpan;
+                //添加span到segment中 并记录结束时间
                 if (toFinishSpan.finish(segment)) {
                     pop();
                 }
@@ -358,7 +363,7 @@ public class TracingContext implements AbstractTracerContext {
         } else {
             throw new IllegalStateException("Stopping the unexpected span = " + span);
         }
-
+        //如果该节点是最后一个节点
         finish();
 
         return activeSpanStack.isEmpty();
@@ -419,9 +424,10 @@ public class TracingContext implements AbstractTracerContext {
                 /*
                  * Notify after tracing finished in the main thread.
                  */
+                //ProfileTaskExecutionService
                 TracingThreadListenerManager.notifyFinish(this);
             }
-
+            //TraceSegmentServiceClient
             if (isFinishedInMainThread && (!isRunningInAsyncMode || asyncSpanCounter == 0)) {
                 TraceSegment finishedSegment = segment.finish(isLimitMechanismWorking());
                 TracingContext.ListenerManager.notifyFinish(finishedSegment);
@@ -481,7 +487,7 @@ public class TracingContext implements AbstractTracerContext {
         public static synchronized void add(TracingThreadListener listener) {
             LISTENERS.add(listener);
         }
-
+        //
         static void notifyFinish(TracingContext finishedContext) {
             for (TracingThreadListener listener : LISTENERS) {
                 listener.afterMainThreadFinish(finishedContext);

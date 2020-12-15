@@ -96,6 +96,7 @@ public class GRPCChannelManager implements BootService, Runnable {
             if (grpcServers.size() > 0) {
                 String server = "";
                 try {
+                    //负载均衡
                     int index = Math.abs(random.nextInt()) % grpcServers.size();
                     if (index != selectedIdx) {
                         selectedIdx = index;

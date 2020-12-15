@@ -127,6 +127,12 @@ public class SkyWalkingAgent {
                     .installOn(instrumentation);
 
         try {
+            /**
+            * @Author duanxuechao
+            * @Description TracingContext ListenerManager add listener
+            * ServiceManager manager all BootService include TracingContext create eg.
+            * @Date 10:59 2020/12/2
+            **/
             ServiceManager.INSTANCE.boot();
         } catch (Exception e) {
             LOGGER.error(e, "Skywalking agent boot failure.");

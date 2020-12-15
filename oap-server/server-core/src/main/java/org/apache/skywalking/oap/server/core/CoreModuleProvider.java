@@ -111,7 +111,12 @@ public class CoreModuleProvider extends ModuleProvider {
     private RemoteClientManager remoteClientManager;
     private final AnnotationScan annotationScan;
     private final StorageModels storageModels;
-    private final SourceReceiverImpl receiver;//handle处理过的源数据进行分发处理
+    /**
+    * @Author duanxuechao
+    * @Description after handle, source
+    * @Date 16:35 2020/11/26
+    **/
+    private final SourceReceiverImpl receiver;
     private ApdexThresholdConfig apdexThresholdConfig;
     private EndpointNameGroupingRuleWatcher endpointNameGroupingRuleWatcher;
 
@@ -168,12 +173,30 @@ public class CoreModuleProvider extends ModuleProvider {
         }
 
         this.registerServiceImplementation(MeterSystem.class, new MeterSystem(getManager()));
-
-        AnnotationScan oalDisable = new AnnotationScan();//oaldisable注解扫描器
-        oalDisable.registerListener(DisableRegister.INSTANCE);//注册注解对应的监听器
-        oalDisable.registerListener(new DisableRegister.SingleDisableScanListener());//注册注解对应的监听器
+        /**
+        * @Author duanxuechao
+        * @Description oaldisable annotation scan setModuleDefine
+        **/
+        AnnotationScan oalDisable = new AnnotationScan();
+        /**
+         * @Author duanxuechao
+         * @Description event listener
+         * @Date 16:43 2020/11/26
+         **/
+        oalDisable.registerListener(DisableRegister.INSTANCE);
+        /**
+         * @Author duanxuechao
+         * @Description oaldisable annotation scan -- single module
+         * @Date 16:43 2020/11/26
+         **/
+        oalDisable.registerListener(new DisableRegister.SingleDisableScanListener());
         try {
-            oalDisable.scan();//扫描后执行监听器的notify方法
+            /**
+            * @Author duanxuechao
+            * @Description scan and run notify method
+            * @Date 17:04 2020/11/26
+            **/
+            oalDisable.scan();
         } catch (IOException | StorageException e) {
             throw new ModuleStartException(e.getMessage(), e);
         }
@@ -260,7 +283,11 @@ public class CoreModuleProvider extends ModuleProvider {
 
         // add oal engine loader service implementations
         this.registerServiceImplementation(OALEngineLoaderService.class, new OALEngineLoaderService(getManager()));
-
+        /**
+        * @Author duanxuechao
+        * @Description registerlistener streamannotationlistener
+        * @Date 16:58 2020/11/26
+        **/
         annotationScan.registerListener(streamAnnotationListener);
 
         if (moduleConfig.isGRPCSslEnabled()) {
@@ -284,11 +311,26 @@ public class CoreModuleProvider extends ModuleProvider {
     public void start() throws ModuleStartException {
         grpcServer.addHandler(new RemoteServiceHandler(getManager()));
         grpcServer.addHandler(new HealthCheckServiceHandler());
-        remoteClientManager.start();//集群节点更新
+        /**
+        * @Author duanxuechao
+        * @Description cluster node update
+        * @Date 16:46 2020/11/26
+        **/
+        remoteClientManager.start();
 
         try {
-            receiver.scan();//这个接收器应该用于扫描源分发器
-            annotationScan.scan();//扫描流式数据注解并执行相应的监听器create方法来构造work
+            /**
+            * @Author duanxuechao
+            * @Description scan all source receiver
+            * @Date 16:47 2020/11/26
+            **/
+            receiver.scan();
+            /**
+            * @Author duanxuechao
+            * @Description scan stream pojo and exec listener notify method to call Processer's create method
+            * @Date 16:56 2020/11/26
+            **/
+            annotationScan.scan();
         } catch (IOException | IllegalAccessException | InstantiationException | StorageException e) {
             throw new ModuleStartException(e.getMessage(), e);
         }

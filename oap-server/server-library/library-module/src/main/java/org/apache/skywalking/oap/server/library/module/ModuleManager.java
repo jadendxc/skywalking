@@ -36,7 +36,12 @@ public class ModuleManager implements ModuleDefineHolder {
      */
     public void init(
         ApplicationConfiguration applicationConfiguration) throws ModuleNotFoundException, ProviderNotFoundException, ServiceNotProvidedException, CycleDependencyException, ModuleConfigException, ModuleStartException {
-        //模块列表 cluster、core、storage....
+
+        /**
+        * @Author duanxuechao
+        * @Description module list->cluster,core,storage,receiver,eg...
+        * @Date 14:48 2020/11/26
+        **/
         String[] moduleNames = applicationConfiguration.moduleList();
         ServiceLoader<ModuleDefine> moduleServiceLoader = ServiceLoader.load(ModuleDefine.class);
         ServiceLoader<ModuleProvider> moduleProviderLoader = ServiceLoader.load(ModuleProvider.class);

@@ -62,6 +62,7 @@ public class CommandExecutorService implements BootService, CommandExecutor {
 
     @Override
     public void execute(final BaseCommand command) throws CommandExecutionException {
+        //找到命令对应的执行器
         executorForCommand(command).execute(command);
     }
 

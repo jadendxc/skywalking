@@ -35,8 +35,13 @@ import org.apache.skywalking.oap.server.core.storage.annotation.Storage;
 import org.apache.skywalking.oap.server.core.storage.model.ModelCreator;
 import org.apache.skywalking.oap.server.core.storage.model.Model;
 import org.apache.skywalking.oap.server.library.module.ModuleDefineHolder;
+/**
+* @Author duanxuechao
+* @Description Single module RecordStreamProcessor
+* @Date 11:12 2020/11/30
+**/
 
-public class RecordStreamProcessor implements StreamProcessor<Record> {//单例模式的Record流式数据处理器
+public class RecordStreamProcessor implements StreamProcessor<Record> {
 
     private final static RecordStreamProcessor PROCESSOR = new RecordStreamProcessor();
 

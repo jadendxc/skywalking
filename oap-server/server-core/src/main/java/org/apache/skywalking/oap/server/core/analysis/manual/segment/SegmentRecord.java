@@ -126,8 +126,12 @@ public class SegmentRecord extends Record {
     }
 
     public static class Builder implements StorageBuilder<SegmentRecord> {
-
-        @Override//入库的时候会将对象转为map
+        /**
+        * @Author duanxuechao
+        * @Description object will be transform to map at sql to db
+        * @Date 11:07 2020/11/30
+        **/
+        @Override
         public Map<String, Object> data2Map(SegmentRecord storageData) {
             storageData.statement = Strings.join(new String[] {
                 storageData.endpointName,
@@ -149,7 +153,12 @@ public class SegmentRecord extends Record {
             if (CollectionUtils.isEmpty(storageData.getDataBinary())) {
                 map.put(DATA_BINARY, Const.EMPTY_STRING);
             } else {
-                map.put(DATA_BINARY, new String(Base64.getEncoder().encode(storageData.getDataBinary())));//base64加密的二进制
+                /**
+                * @Author duanxuechao
+                * @Description base64
+                * @Date 11:09 2020/11/30
+                **/
+                map.put(DATA_BINARY, new String(Base64.getEncoder().encode(storageData.getDataBinary())));
             }
             map.put(VERSION, storageData.getVersion());
             map.put(TAGS, storageData.getTags());
